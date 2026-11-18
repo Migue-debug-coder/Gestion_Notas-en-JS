@@ -1,4 +1,4 @@
-const lista_notas = [];
+let lista_notas = [];
 let validacion = false;
 // Variable para pasarla como parámetro para la funcion validarNota(nota)
 
@@ -40,22 +40,23 @@ do {
             let max = -Infinity;
             let min = Infinity;
             let suma = 0;
-            if (lista.length == 0) {
+            if (lista_notas.length == 0) {
                 window.alert("No se puede mostrar estadísticas porque la lista de notas está vacía");
             } else {
-                for (const valor of lista) {
-                    if (valor > max) {
-                        max = valor;
+                for (let i = 0; i < lista_notas.length;i++) {
+                    if (lista_notas[i] > max) {
+                        max = lista_notas[i];
                     }
-                    if (valor < min) {
-                        min = valor;
+                    if (lista_notas[i] < min) {
+                        min = lista_notas[i];
                     }
-                    suma += valor;
+                    suma += lista_notas[i];
                 }
 
-                window.alert(`La nota máxima es: ${max} \n` +
+                window.alert(`La moda es ${obtenerModa(lista_notas)}\n`+
+                    `La nota máxima es: ${max} \n` +
                     `La nota mínima es: ${min} \n` +
-                    `El promedio de notas de la lista es: ${suma / lista.length}`
+                    `El promedio de notas de la lista es: ${parseFloat(suma / lista_notas.length).toFixed(2)}`
                 );
             }
             break;
@@ -64,8 +65,10 @@ do {
             window.alert("La lista de notas ha sido vaciada");
             break;
         case "F":
-            let num = parseInt(window.prompt("Introduzca el número de notas que desea generar: "));
-            let valor = parseFloat(window.prompt("Introduzca el valor de esas notas: "));
+            const num = parseInt(window.prompt("Introduzca el número de notas que desea generar: "));
+            const valor = parseFloat(window.prompt("Introduzca el valor de esas notas: "));
+            lista_notas = new Array(num);
+            lista_notas.fill(valor);
             break;
         case "G":
             if (lista_notas.length == 0) {
@@ -89,22 +92,72 @@ do {
             }
             break;
         case "J":
+            let nota_origen = introduceNota();
+            let nota_destino = introduceNota();
+            for (let i = 0; i < lista_notas.length; i++) {
+                if (lista_notas[i] == nota_origen) {
+                    lista_notas[i] = nota_destino;
+                }
+            }
             break;
         case "K":
+            let nota_posicion = introduceNota();
             let posicion = parseInt(window.prompt("¿En que posición desea introducir la nota?: "));
-            
+            if(posicion > lista_notas.length - 1 || posicion < 0){
+                window.alert("No existe dentro de la lista de notas la posición indicada");
+            }else{
+                lista_notas.splice(posicion,0,nota_posicion);
+            }
             break;
-
+        case "L":
+            let suspensos = 0;
+            for(let i = 0; i < lista_notas.length;i++){
+                if(lista_notas[i] < 5){
+                    suspensos++;
+                }
+            }
+            window.alert(`El número total de suspensos es de: ${suspensos}`);
+            break;
+        case "M":
+            window.alert("Has seleccionado salir del programa de Gestión de Notas, Hasta la Próxima!");
+            validacion = true;
+            break;
+        default:
+            window.alert("Introduzca una opción válida");
+            break;
     }
 
 
-} while (validacion);
+} while (!validacion);
+
+console.table(lista_notas);
 
 function introduceNota() {
     let nota = 0;
     do {
-        nota = parseFloat(window.prompt("Introduzca una nota: ")).toFixed(2);
+        nota = parseFloat(parseFloat(window.prompt("Introduzca una nota: ")).toFixed(2));
     } while (nota < 0 || nota > 10);
 
     return nota;
 }
+function obtenerModa(array) {
+  let moda = array[0];
+  let contadorMaximo = 0;
+
+  for (let i = 0; i < array.length; i++) {
+    let contador = 0;
+
+    for (let j = 0; j < array.length; j++) {
+      if (array[i] === array[j]) {
+        contador++;
+      }
+    }
+
+    if (contador > contadorMaximo) {
+      contadorMaximo = contador;
+      moda = array[i];
+    }
+  }
+  return moda;
+}
+ 
