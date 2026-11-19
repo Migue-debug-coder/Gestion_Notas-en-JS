@@ -37,25 +37,18 @@ do {
             }
             break;
         case "D":
-            let max = -Infinity;
-            let min = Infinity;
             let suma = 0;
             if (lista_notas.length == 0) {
                 window.alert("No se puede mostrar estadísticas porque la lista de notas está vacía");
             } else {
-                for (let i = 0; i < lista_notas.length;i++) {
-                    if (lista_notas[i] > max) {
-                        max = lista_notas[i];
-                    }
-                    if (lista_notas[i] < min) {
-                        min = lista_notas[i];
-                    }
+                for (let i = 0; i < lista_notas.length; i++) {
                     suma += lista_notas[i];
                 }
+                let lista_notas_copy = [...lista_notas];
 
-                window.alert(`La moda es ${obtenerModa(lista_notas)}\n`+
-                    `La nota máxima es: ${max} \n` +
-                    `La nota mínima es: ${min} \n` +
+                window.alert(`La moda es ${obtenerModa(lista_notas)}\n` +
+                    `La nota máxima es: ${lista_notas_copy[0]} \n` +
+                    `La nota mínima es: ${lista_notas_copy[lista_notas_copy.length - 1]} \n` +
                     `El promedio de notas de la lista es: ${parseFloat(suma / lista_notas.length).toFixed(2)}`
                 );
             }
@@ -103,16 +96,16 @@ do {
         case "K":
             let nota_posicion = introduceNota();
             let posicion = parseInt(window.prompt("¿En que posición desea introducir la nota?: "));
-            if(posicion > lista_notas.length - 1 || posicion < 0){
+            if (posicion > lista_notas.length - 1 || posicion < 0) {
                 window.alert("No existe dentro de la lista de notas la posición indicada");
-            }else{
-                lista_notas.splice(posicion,0,nota_posicion);
+            } else {
+                lista_notas.splice(posicion, 0, nota_posicion);
             }
             break;
         case "L":
             let suspensos = 0;
-            for(let i = 0; i < lista_notas.length;i++){
-                if(lista_notas[i] < 5){
+            for (let i = 0; i < lista_notas.length; i++) {
+                if (lista_notas[i] < 5) {
                     suspensos++;
                 }
             }
@@ -140,24 +133,46 @@ function introduceNota() {
 
     return nota;
 }
-function obtenerModa(array) {
-  let moda = array[0];
-  let contadorMaximo = 0;
 
-  for (let i = 0; i < array.length; i++) {
-    let contador = 0;
+// ---------- Cómo Obtener la Moda con arrays ----------
+// function obtenerModa(array) {
+//   let moda = array[0];
+//   let contadorMaximo = 0;
 
-    for (let j = 0; j < array.length; j++) {
-      if (array[i] === array[j]) {
-        contador++;
-      }
+//   for (let i = 0; i < array.length; i++) {
+//     let contador = 0;
+
+//     for (let j = 0; j < array.length; j++) {
+//       if (array[i] === array[j]) {
+//         contador++;
+//       }
+//     }
+
+//     if (contador > contadorMaximo) {
+//       contadorMaximo = contador;
+//       moda = array[i];
+//     }
+//   }
+//   return moda;
+// }
+
+// ---------- Cómo Obtener la Nota usando Mapas ----------
+function obtenerModa(lista_notas) {
+    let mapa = new Map();
+    for (nota of lista_notas) {
+        if (mapa.has(nota)) {
+            mapa.set(nota, mapa.get(nota) + 1);
+        } else {
+            mapa.set(nota, 1);
+        }
     }
-
-    if (contador > contadorMaximo) {
-      contadorMaximo = contador;
-      moda = array[i];
+    let moda = 0;
+    let repes_max = 0;
+    for (nota of mapa.keys()) {
+        if (repes_max < mapa.get(nota)) {
+            repes_max = mapa.get(nota);
+            moda = repes_max;
+        }
     }
-  }
-  return moda;
+    return moda;
 }
- 
