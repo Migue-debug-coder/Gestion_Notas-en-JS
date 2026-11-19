@@ -171,7 +171,7 @@ function obtenerModa(lista_notas) {
     for (nota of mapa.keys()) {
         if (repes_max < mapa.get(nota)) {
             repes_max = mapa.get(nota);
-            moda = repes_max;
+            moda = nota;
         }
     }
     return moda;
