@@ -45,6 +45,7 @@ do {
                     suma += lista_notas[i];
                 }
                 let lista_notas_copy = [...lista_notas];
+                lista_notas_copy.sort();
 
                 window.alert(`La moda es ${obtenerModa(lista_notas)}\n` +
                     `La nota máxima es: ${lista_notas_copy[0]} \n` +
